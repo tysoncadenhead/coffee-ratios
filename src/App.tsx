@@ -1,9 +1,9 @@
 import * as React from 'react';
 
-import AppWrapper from './components/AppWrapper';
+import AppWrapper from './styles/AppWrapper';
 import Coffee from './components/Coffee';
 import Thumbnail from './components/Thumbnail';
-import Thumbnails from './components/Thumbnails'
+import Thumbnails from './styles/Thumbnails'
 import fetchCoffees from './api/fetchCoffees';
 
 class App extends React.Component <any, any> {
