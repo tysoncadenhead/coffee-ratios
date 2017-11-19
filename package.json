@@ -13,7 +13,10 @@
     "@types/react": "^16.0.24",
     "@types/react-dom": "^16.0.3",
     "classnames": "^2.2.5",
-    "react-scripts-ts": "2.8.0"
+    "ramda": "^0.25.0",
+    "react-functional-lifecycle": "^2.0.2",
+    "react-scripts-ts": "2.8.0",
+    "recompose": "^0.26.0"
   },
   "scripts": {
     "start": "react-scripts-ts start",

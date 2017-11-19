@@ -66,7 +66,7 @@ class Thumbnail extends React.Component <any, any> {
             <Container 
                 onMouseDown={this.startHovering}
                 onMouseUp={this.endHovering}
-                onClick={this.props.onClick} 
+                onClick={() => this.props.setSelectedCoffee(this.props.id)} 
                 style={{
                     backgroundColor: this.props.isFavorite ? '#ffe500' : 'rgb(60, 26, 17)',
                     borderColor: this.props.isFavorite ? '#FFFFFF' : 'transparent',
