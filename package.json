@@ -16,7 +16,8 @@
     "ramda": "^0.25.0",
     "react-functional-lifecycle": "^2.0.2",
     "react-scripts-ts": "2.8.0",
-    "recompose": "^0.26.0"
+    "recompose": "^0.26.0",
+    "react-test-renderer": "^16.1.1"
   },
   "scripts": {
     "start": "react-scripts-ts start",
