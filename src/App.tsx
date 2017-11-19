@@ -13,7 +13,7 @@ import fetchCoffees from './api/fetchCoffees';
 import fetchFavorites from './api/fetchFavorites';
 import removeFromFavorites from './api/removeFromFavorites';
 
-const App = props => (
+export const App = props => (
     <AppWrapper>
         <Thumbnails>
             {props.coffees.map(coffee => (
@@ -57,25 +57,29 @@ const toggleFavoriteMethod = R.ifElse(
 
 const getSelectedCoffeeId = R.prop('selectedCoffee');
 
-const getFavoriteRequest = props => {
+export const getIsFavorite = props => {
     const id = getSelectedCoffeeId(props);
-    const isFavorite = R.path(['favorites', id])(props);
-    return toggleFavoriteMethod(isFavorite);
+    return R.path(['favorites', id], props);
 };
+
+const getFavoriteRequest = compose(
+    toggleFavoriteMethod,
+    getIsFavorite
+);
+
+const toggleIsFavorite = R.curry((props, _e) => {
+    const request = getFavoriteRequest(props);
+    const id = getSelectedCoffeeId(props);
+    
+    return request(id).then(props.setFavorites);
+});
 
 export default compose(
     withState('favorites', 'setFavorites', {}),
     withState('selectedCoffee', 'setSelectedCoffee'),
     withState('coffees', 'setCoffees', []),
     withHandlers({
-        toggleIsFavorite: R.curry((props, _e) => {
-            const request = getFavoriteRequest(props);
-            const id = getSelectedCoffeeId(props);
-            
-            return request(id).then(favorites => {
-                props.setFavorites(favorites);
-            });
-        })
+        toggleIsFavorite
     }),
     componentDidMount(
         compose(
