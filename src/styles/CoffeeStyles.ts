@@ -54,3 +54,7 @@ export const CupHandle = styled.div`
     height: 150px;
     width: 40px;
 `;
+
+export const Favorite = styled.i`
+    cursor: pointer;
+`;

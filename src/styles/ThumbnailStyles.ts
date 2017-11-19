@@ -2,7 +2,6 @@ import styled from 'styled-components';
 
 export const Container = styled.button`
     background-color: rgb(60, 26, 17);
-    border: none;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -14,6 +13,8 @@ export const Container = styled.button`
     margin: 7px;
     outline: none;
     cursor: pointer;
+    border-width: 4px;
+    border-style: solid;
 
     &:focus {
         padding: 22px;

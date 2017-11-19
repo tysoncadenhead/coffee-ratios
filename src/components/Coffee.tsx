@@ -1,6 +1,7 @@
 import * as React from 'react';
+import * as classnames from 'classnames';
 
-import { CoffeeCup, CoffeeDescription, CoffeeName, Container, CupHandle, Ingredient } from '../styles/CoffeeStyles';
+import { CoffeeCup, CoffeeDescription, CoffeeName, Container, CupHandle, Favorite, Ingredient } from '../styles/CoffeeStyles';
 
 import findOneCoffee from '../api/findOneCoffee';
 import findOneIngredient from '../api/findOneIngredient';
@@ -59,7 +60,17 @@ class Coffee extends React.Component <any, any> {
         
         return (
             <Container>
-                <CoffeeName>{this.state.coffee.name}</CoffeeName>
+                <CoffeeName><Favorite 
+                    onClick={this.props.toggleIsFavorite}
+                    style={{
+                        color: this.props.isFavorite ? '#ffe500' : '#FFFFFF'
+                    }}
+                    className={classnames({
+                        'fa': true,
+                        'fa-heart': this.props.isFavorite,
+                        'fa-heart-o': !this.props.isFavorite
+                    })}
+                /> {this.state.coffee.name}</CoffeeName>
                 <CoffeeCup>
                     <CupHandle />
                     {this.state.coffee.ingredients.map(ingredient => (
