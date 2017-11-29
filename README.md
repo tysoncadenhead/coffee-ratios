@@ -1,6 +1,6 @@
 # Coffee Ratios
 
-[Slides](https://docs.google.com/presentation/d/1lUP-mpSbLUHIHN1VGr8ZmCVCoT5ZK2XqsWoTdkkpUfI/edit?usp=sharing)
+[Check out the Slides from Nodevember](https://docs.google.com/presentation/d/1lUP-mpSbLUHIHN1VGr8ZmCVCoT5ZK2XqsWoTdkkpUfI/edit?usp=sharing)
 
 This is an example React app made to demonstrate refactoring Object-Oriented React to Functional React.
 
