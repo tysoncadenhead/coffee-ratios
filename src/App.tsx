@@ -1,107 +1,77 @@
+import * as R from 'ramda';
 import * as React from 'react';
+
+import { withHandlers, withState } from 'recompose';
 
 import AppWrapper from './styles/AppWrapper';
 import Coffee from './components/Coffee';
 import Thumbnail from './components/Thumbnail';
 import Thumbnails from './styles/Thumbnails'
 import addToFavorites from './api/addToFavorites';
+import { componentDidMount } from 'react-functional-lifecycle';
 import fetchCoffees from './api/fetchCoffees';
 import fetchFavorites from './api/fetchFavorites';
 import removeFromFavorites from './api/removeFromFavorites';
 
-class App extends React.Component <any, any> {
+const App = props => (
+    <AppWrapper>
+        <Thumbnails>
+            {props.coffees.map(coffee => (
+                <Thumbnail 
+                    id={coffee.id} 
+                    key={coffee.id} 
+                    isFavorite={R.path(['favorites', coffee.id], props)}
+                    selectedCoffee={props.selectedCoffee} 
+                        onClick={R.compose(
+                            props.setSelectedCoffee,
+                            R.always(coffee.id)
+                        )} />
+            ))}
+        </Thumbnails>
+        <Coffee 
+            id={props.selectedCoffee} 
+            key={props.selectedCoffee}
+            isFavorite={R.path(['favorites', props.selectedCoffee], props)}
+            toggleIsFavorite={props.toggleIsFavorite}
+        />
+    </AppWrapper>
+);
 
-    constructor (props: any) {
-        super(props);
+const getId = R.prop('selectedCoffee');
 
-        this.setSelectedCoffee = this.setSelectedCoffee.bind(this);
-        this.toggleIsFavorite = this.toggleIsFavorite.bind(this);
+const toggleIsFavorite = props => {
+    const id = getId(props);
+    const isFavorite = R.path(['favorites', id])(props);
 
-        this.state = {
-            selectedCoffee: null,
-            favorites: {},
-            coffees: []
-        };
-    }
+    const toggleFavorite = R.ifElse(
+        R.equals(true),
+        R.always(removeFromFavorites),
+        R.always(addToFavorites)
+    )(isFavorite);
 
-    setSelectedCoffee (selectedCoffee) {
-        this.setState({
-            selectedCoffee
-        });
-    }
+    return toggleFavorite(id)
+        .then(props.setFavorites);
+};
 
-    getFavorites () {
-        fetchFavorites()
-            .then(favorites => {
-                this.setState({
-                    favorites
-                });
-            });
-    }
+const getFavorites = props =>
+    fetchFavorites()
+        .then(props.setFavorites);
 
-    getCoffees () {
-        fetchCoffees()
-            .then(coffees => {
-                this.setState({
-                    coffees
-                });
-            });
-    }
+const getCoffees = props =>
+    fetchCoffees()
+        .then(props.setCoffees);
 
-    componentDidMount () {
-        this.getCoffees();
-        this.getFavorites();
-    }
-
-    toggleIsFavorite () {
-        const id = this.state.selectedCoffee;
-        const isFavorite = this.state.favorites[id];
-
-        if (isFavorite) {
-            return removeFromFavorites(id)
-                .then(favorites => {
-                    this.setState({
-                        favorites
-                    })
-                });
-        } else {
-            return addToFavorites(id)
-                .then(favorites => {
-                    this.setState({
-                        favorites
-                    })
-                });
-        }
-    }
-
-    render() {
-        return (
-            <AppWrapper>
-                <Thumbnails>
-                    {this.state.coffees.map(coffee => (
-                        <Thumbnail 
-                            id={coffee.id} 
-                            key={coffee.id} 
-                            isFavorite={this.state.favorites[
-                                coffee.id
-                            ]}
-                            selectedCoffee={this.state.selectedCoffee} 
-                                onClick={() => {
-                                this.setSelectedCoffee(coffee.id)
-                            }} />
-                    ))}
-                </Thumbnails>
-                <Coffee 
-                    id={this.state.selectedCoffee} 
-                    key={this.state.selectedCoffee}
-                    isFavorite={this.state.favorites[
-                        this.state.selectedCoffee
-                    ]}
-                    toggleIsFavorite={this.toggleIsFavorite}
-                />
-            </AppWrapper>
-        );
-    }
-}
-
-export default App;
+export default R.compose(
+    withState('selectedCoffee', 'setSelectedCoffee', null),
+    withState('favorites', 'setFavorites', {}),
+    withState('coffees', 'setCoffees', []),
+    withHandlers({
+        toggleIsFavorite,
+        getFavorites,
+        getCoffees
+    }),
+    componentDidMount(R.compose(
+        R.tap(getCoffees),
+        R.tap(getFavorites)
+    ))
+)(App);

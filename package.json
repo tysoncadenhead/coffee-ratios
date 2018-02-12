@@ -3,8 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "ramda": "^0.25.0",
     "react": "^16.1.1",
     "react-dom": "^16.1.1",
+    "react-functional-lifecycle": "^2.0.2",
+    "recompose": "^0.26.0",
     "styled-components": "^2.2.3"
   },
   "devDependencies": {
